@@ -1,21 +1,29 @@
+import { clearOrderByNumber, getOrderByNumber } from '@/services/slices/orderSlice';
+import { useDispatch, useSelector } from '@/services/store';
 import { Preloader, OrderInfoUI } from '@ui';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
+import { useParams } from 'react-router-dom';
 
 import type { TIngredient } from '@utils-types';
 
 export const OrderInfo = (): React.JSX.Element => {
   /** TODO: взять переменные orderData и ingredients из стора */
-  const orderData = {
-    createdAt: '',
-    ingredients: [],
-    _id: '',
-    status: '',
-    name: '',
-    updatedAt: 'string',
-    number: 0,
-  };
 
-  const ingredients: TIngredient[] = [];
+  const { number } = useParams<{ number: string }>();
+  const dispatch = useDispatch();
+
+  const orderData = useSelector((state) => state.order.orderByNumber);
+  const ingredients = useSelector((state) => state.ingredients.data);
+
+  useEffect(() => {
+    if (!number) return;
+
+    void dispatch(getOrderByNumber(Number(number)));
+
+    return (): void => {
+      dispatch(clearOrderByNumber());
+    };
+  }, [dispatch, number]);
 
   /* Готовим данные для отображения */
   const orderInfo = useMemo(() => {
@@ -61,5 +69,9 @@ export const OrderInfo = (): React.JSX.Element => {
     return <Preloader />;
   }
 
-  return <OrderInfoUI orderInfo={orderInfo} />;
+  return (
+    <>
+      <OrderInfoUI orderInfo={orderInfo} />
+    </>
+  );
 };

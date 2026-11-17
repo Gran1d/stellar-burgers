@@ -1,24 +1,25 @@
+import { updateUser } from '@/services/slices/userSlice';
+import { useSelector, useDispatch } from '@/services/store';
 import { ProfileUI } from '@ui-pages';
 import { type SyntheticEvent, useEffect, useState } from 'react';
 
 export const Profile = (): React.JSX.Element => {
   /** TODO: Взять переменную из стора */
-  const user = {
-    name: '',
-    email: '',
-  };
+  const user = useSelector((state) => state.user.data);
+  const dispatch = useDispatch();
+  const error = useSelector((state) => state.user.userError);
 
   const [formValue, setFormValue] = useState({
-    name: user.name,
-    email: user.email,
+    name: user?.name ?? '',
+    email: user?.email ?? '',
     password: '',
   });
 
   useEffect(() => {
     setFormValue((prevState) => ({
       ...prevState,
-      name: user?.name || '',
-      email: user?.email || '',
+      name: user?.name ?? '',
+      email: user?.email ?? '',
     }));
   }, [user]);
 
@@ -27,15 +28,32 @@ export const Profile = (): React.JSX.Element => {
     formValue.email !== user?.email ||
     !!formValue.password;
 
-  const handleSubmit = (e: SyntheticEvent): void => {
+  const handleSubmit = async (e: SyntheticEvent): Promise<void> => {
     e.preventDefault();
+
+    const data = {
+      name: formValue.name,
+      email: formValue.email,
+      ...(formValue.password ? { password: formValue.password } : {}),
+    };
+
+    try {
+      await dispatch(updateUser(data)).unwrap();
+
+      setFormValue((prev) => ({
+        ...prev,
+        password: '',
+      }));
+    } catch {
+      // Ошибка сохраняется в userSlice и отображается через updateUserError.
+    }
   };
 
   const handleCancel = (e: SyntheticEvent): void => {
     e.preventDefault();
     setFormValue({
-      name: user.name,
-      email: user.email,
+      name: user?.name ?? '',
+      email: user?.email ?? '',
       password: '',
     });
   };
@@ -51,8 +69,11 @@ export const Profile = (): React.JSX.Element => {
     <ProfileUI
       formValue={formValue}
       isFormChanged={isFormChanged}
+      updateUserError={error ?? ''}
       handleCancel={handleCancel}
-      handleSubmit={handleSubmit}
+      handleSubmit={(e): void => {
+        void handleSubmit(e);
+      }}
       handleInputChange={handleInputChange}
     />
   );
