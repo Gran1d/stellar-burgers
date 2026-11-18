@@ -8,7 +8,6 @@ export const ProfileMenu = (): React.JSX.Element => {
 
   const dispatch = useDispatch();
   const handleLogout = (): void => {
-    // TODO: Разлогинить пользователя
     void dispatch(logout());
   };
 

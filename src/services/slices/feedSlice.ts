@@ -1,22 +1,14 @@
 import { getFeedsApi } from '@/utils/burger-api';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
-import type { TOrder } from '@utils-types';
+import type { TFeedState } from '@utils-types';
 
-type TFeedSliceState = {
-  orders: TOrder[];
-  total: number;
-  totalToday: number;
-  isLoading: boolean;
-  feedError: string | null;
-};
-
-const initialState: TFeedSliceState = {
+const initialState: TFeedState = {
   orders: [],
   total: 0,
   totalToday: 0,
   isLoading: false,
-  feedError: null,
+  error: null,
 };
 
 export const getFeeds = createAsyncThunk('feed/getFeeds', async () => {
@@ -31,11 +23,11 @@ export const feedSlice = createSlice({
     builder
       .addCase(getFeeds.pending, (state) => {
         state.isLoading = true;
-        state.feedError = null;
+        state.error = null;
       })
       .addCase(getFeeds.rejected, (state, action) => {
         state.isLoading = false;
-        state.feedError = action.error.message ?? 'Ошибка получения ленты';
+        state.error = action.error.message ?? 'Ошибка получения ленты';
       })
       .addCase(getFeeds.fulfilled, (state, action) => {
         state.orders = action.payload.orders;

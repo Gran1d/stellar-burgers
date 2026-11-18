@@ -7,8 +7,6 @@ import { useParams } from 'react-router-dom';
 import type { TIngredient } from '@utils-types';
 
 export const OrderInfo = (): React.JSX.Element => {
-  /** TODO: взять переменные orderData и ingredients из стора */
-
   const { number } = useParams<{ number: string }>();
   const dispatch = useDispatch();
 

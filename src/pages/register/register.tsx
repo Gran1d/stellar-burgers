@@ -1,7 +1,7 @@
-import { registerUser } from '@/services/slices/userSlice';
+import { clearRegisterError, registerUser } from '@/services/slices/userSlice';
 import { useDispatch, useSelector } from '@/services/store';
 import { RegisterUI } from '@ui-pages';
-import { type SyntheticEvent, useState } from 'react';
+import { type SyntheticEvent, useEffect, useState } from 'react';
 
 export const Register = (): React.JSX.Element => {
   const [userName, setUserName] = useState('');
@@ -9,7 +9,11 @@ export const Register = (): React.JSX.Element => {
   const [password, setPassword] = useState('');
 
   const dispatch = useDispatch();
-  const error = useSelector((state) => state.user.userError);
+  const error = useSelector((state) => state.user.registerError);
+
+  useEffect(() => {
+    dispatch(clearRegisterError());
+  }, [dispatch]);
 
   const handleSubmit = (e: SyntheticEvent): void => {
     e.preventDefault();

@@ -1,6 +1,8 @@
 import { getOrderByNumberApi, getOrdersApi, orderBurgerApi } from '@/utils/burger-api';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
+import { logout } from './userSlice';
+
 import type { TOrder } from '@utils-types';
 
 type TOrderState = {
@@ -10,6 +12,7 @@ type TOrderState = {
   orderRequest: boolean;
   isLoadingOrderByNumber: boolean;
   isLoadingOrders: boolean;
+  isOrderModalOpen: boolean;
   orderError: string | null;
 };
 
@@ -20,6 +23,7 @@ const initialState: TOrderState = {
   orderRequest: false,
   isLoadingOrderByNumber: false,
   isLoadingOrders: false,
+  isOrderModalOpen: false,
   orderError: null,
 };
 
@@ -51,10 +55,13 @@ export const orderSlice = createSlice({
     builder
       .addCase(orderBurger.pending, (state) => {
         state.orderRequest = true;
+        state.isOrderModalOpen = true;
+        state.orderModalData = null;
         state.orderError = null;
       })
       .addCase(orderBurger.rejected, (state, action) => {
         state.orderRequest = false;
+        state.isOrderModalOpen = false;
         state.orderError = action.error.message ?? 'Ошибка оформления заказа';
       })
       .addCase(orderBurger.fulfilled, (state, action) => {
@@ -84,12 +91,15 @@ export const orderSlice = createSlice({
       .addCase(getOrders.fulfilled, (state, action) => {
         state.userOrders = action.payload;
         state.isLoadingOrders = false;
+      })
+      .addCase(logout.fulfilled, (state) => {
+        state.userOrders = [];
       });
   },
   reducers: {
     clearOrder: (state) => {
       state.orderModalData = null;
-      state.orderRequest = false;
+      state.isOrderModalOpen = false;
     },
     clearOrderByNumber: (state) => {
       state.orderByNumber = null;

@@ -1,8 +1,9 @@
 import { addIngredients } from '@/services/slices/constructorSlice';
 import { BurgerIngredientUI } from '@ui';
 import { memo } from 'react';
-import { useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
+
+import { useDispatch } from '@services/store';
 
 import type { TBurgerIngredientProps } from './type';
 
@@ -14,7 +15,6 @@ export const BurgerIngredient = memo(function BurgerIngredient({
   const dispatch = useDispatch();
 
   const handleAdd = (): void => {
-    // TODO: Добавить ингредиент в конструктор
     dispatch(addIngredients(ingredient));
   };
 

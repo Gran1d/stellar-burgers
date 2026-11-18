@@ -1,4 +1,3 @@
-import { clearConstructor } from '@/services/slices/constructorSlice';
 import { clearOrder, orderBurger } from '@/services/slices/orderSlice';
 import { useDispatch, useSelector } from '@/services/store';
 import { BurgerConstructorUI } from '@ui';
@@ -8,19 +7,17 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import type { TConstructorIngredient, TConstructorState, TOrder } from '@utils-types';
 
 export const BurgerConstructor = (): React.JSX.Element | null => {
-  /** TODO: Взять переменные constructorItems, orderRequest и orderModalData из стора */
   const dispatch = useDispatch();
+  const isOrderModalOpen = useSelector((state) => state.order.isOrderModalOpen);
   const navigate = useNavigate();
   const location = useLocation();
   const user = useSelector((state) => state.user.data);
   const constructorItems: TConstructorState = useSelector(
     (state) => state.burgerConstructor
   );
-  const orderRequest = useSelector(
-    (state: { order: { orderRequest: boolean } }) => state.order.orderRequest
-  );
+  const orderRequest = useSelector((state) => state.order.orderRequest);
   const orderModalData: TOrder | null = useSelector(
-    (state: { order: { orderModalData: TOrder | null } }) => state.order.orderModalData
+    (state) => state.order.orderModalData
   );
 
   const onOrderClick = (): void => {
@@ -32,7 +29,6 @@ export const BurgerConstructor = (): React.JSX.Element | null => {
     }
 
     if (!constructorItems.bun || orderRequest) return;
-    // TODO: Оформить заказ
     const ingredientIds = [
       constructorItems.bun._id,
       ...constructorItems.ingredients.map((ingredient) => ingredient._id),
@@ -43,9 +39,7 @@ export const BurgerConstructor = (): React.JSX.Element | null => {
   };
 
   const closeOrderModal = (): void => {
-    // TODO: Закрыть модальное окно и сбросить заказ
     dispatch(clearOrder());
-    dispatch(clearConstructor());
   };
 
   const price = useMemo(
@@ -64,6 +58,7 @@ export const BurgerConstructor = (): React.JSX.Element | null => {
       orderRequest={orderRequest}
       constructorItems={constructorItems}
       orderModalData={orderModalData}
+      isOrderModalOpen={isOrderModalOpen}
       onOrderClick={onOrderClick}
       closeOrderModal={closeOrderModal}
     />

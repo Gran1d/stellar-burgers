@@ -1,13 +1,12 @@
-import { updateUser } from '@/services/slices/userSlice';
+import { clearUpdateUserError, updateUser } from '@/services/slices/userSlice';
 import { useSelector, useDispatch } from '@/services/store';
 import { ProfileUI } from '@ui-pages';
 import { type SyntheticEvent, useEffect, useState } from 'react';
 
 export const Profile = (): React.JSX.Element => {
-  /** TODO: Взять переменную из стора */
   const user = useSelector((state) => state.user.data);
   const dispatch = useDispatch();
-  const error = useSelector((state) => state.user.userError);
+  const error = useSelector((state) => state.user.updateUserError);
 
   const [formValue, setFormValue] = useState({
     name: user?.name ?? '',
@@ -16,12 +15,13 @@ export const Profile = (): React.JSX.Element => {
   });
 
   useEffect(() => {
+    dispatch(clearUpdateUserError());
     setFormValue((prevState) => ({
       ...prevState,
       name: user?.name ?? '',
       email: user?.email ?? '',
     }));
-  }, [user]);
+  }, [user, dispatch]);
 
   const isFormChanged =
     formValue.name !== user?.name ||

@@ -7,7 +7,6 @@ import { useEffect } from 'react';
 import type { TOrder } from '@utils-types';
 
 export const Feed = (): React.JSX.Element => {
-  // TODO: Взять переменную из стора
   const dispatch = useDispatch();
   const orders: TOrder[] = useSelector((state) => state.feed.orders);
 
@@ -16,7 +15,6 @@ export const Feed = (): React.JSX.Element => {
   }, [dispatch]);
 
   const handleGetFeeds = (): void => {
-    // TODO: Запросить ленту заказов
     void dispatch(getFeeds());
   };
 
