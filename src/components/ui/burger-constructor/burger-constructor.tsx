@@ -18,6 +18,7 @@ export const BurgerConstructorUI = ({
   orderModalData,
   onOrderClick,
   closeOrderModal,
+  isOrderModalOpen,
 }: BurgerConstructorUIProps): React.JSX.Element => (
   <section className={styles.burger_constructor}>
     {constructorItems.bun ? (
@@ -82,13 +83,13 @@ export const BurgerConstructorUI = ({
       </Button>
     </div>
 
-    {orderRequest && (
+    {isOrderModalOpen && orderRequest && (
       <Modal onClose={closeOrderModal} title={'Оформляем заказ...'}>
         <Preloader />
       </Modal>
     )}
 
-    {orderModalData && (
+    {isOrderModalOpen && !orderRequest && orderModalData && (
       <Modal onClose={closeOrderModal} title={orderRequest ? 'Оформляем заказ...' : ''}>
         <OrderDetailsUI orderNumber={orderModalData.number} />
       </Modal>
