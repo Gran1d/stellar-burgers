@@ -1,10 +1,10 @@
 import { test, expect } from '@playwright/test';
 
 test.describe("Страница конструктора бургера", () => {
-    test.beforeEach('Загрузка ингридиентов из HAR', async ({ page }) => {
-    await page.routeFromHAR('./tests/hars/ingredients.har', {
-        url: '**/api/ingredients',
-        update: false, // Режим записи
+    test.beforeEach("Загрузка ингридиентов из HAR", async ({ page }) => {
+    await page.routeFromHAR("./tests/hars/ingredients.har", {
+        url: "**/api/ingredients",
+        update: false,
     });
 
     await page.goto('/');
