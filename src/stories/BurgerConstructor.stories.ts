@@ -23,6 +23,7 @@ export const DefaultConstructor: Story = {
     orderRequest: false,
     price: 0,
     orderModalData: null,
+    isOrderModalOpen: false,
     onOrderClick: fn(),
     closeOrderModal: fn(),
   },
