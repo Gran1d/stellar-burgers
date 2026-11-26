@@ -16,8 +16,8 @@ import type {
 } from '@/utils/types';
 
 const ingredient: TIngredient = {
-  _id: 'ingrident',
-  name: 'Тестовый ингридиент',
+  _id: 'ingredient',
+  name: 'Тестовый ингредиент',
   type: 'main',
   proteins: 10,
   fat: 10,
@@ -67,7 +67,7 @@ describe('Редьюсер constructor', () => {
     expect(result).toEqual({ bun: null, ingredients: [] });
   });
 
-  test('Добавление ингридиента', () => {
+  test('Добавление ингредиента', () => {
     const previousState = {
       bun: constructorBun,
       ingredients: [firstIngredient],
@@ -76,7 +76,10 @@ describe('Редьюсер constructor', () => {
     const action = addIngredients(ingredient);
     const result = constructorReducer(previousState, action);
 
-    expect(result.ingredients).toEqual([firstIngredient, action.payload]);
+    expect(result.ingredients).toEqual([
+      firstIngredient,
+      { ...ingredient, id: expect.any(String) },
+    ]);
     expect(result.bun).toEqual(constructorBun);
 
     expect(action.payload.id).toEqual(expect.any(String));
@@ -110,7 +113,7 @@ describe('Редьюсер constructor', () => {
     expect(result.ingredients).toEqual(filledState.ingredients);
   });
 
-  test('Удаление ингридиента по id', () => {
+  test('Удаление ингредиента по id', () => {
     const action = removeIngredient(firstIngredient.id);
     const result = constructorReducer(filledState, action);
 
@@ -118,7 +121,7 @@ describe('Редьюсер constructor', () => {
     expect(result.bun).toEqual(filledState.bun);
   });
 
-  test('Изменение порядка ингридиентов', () => {
+  test('Изменение порядка ингредиентов', () => {
     const action = moveIngredient({ dragIndex: 0, hoverIndex: 1 });
     const result = constructorReducer(filledState, action);
 
@@ -126,7 +129,7 @@ describe('Редьюсер constructor', () => {
     expect(result.bun).toEqual(filledState.bun);
   });
 
-  test('Очистка ингридиентов и булок', () => {
+  test('Очистка ингредиентов и булок', () => {
     const result = constructorReducer(filledState, clearConstructor());
 
     expect(result).toEqual(emptyState);

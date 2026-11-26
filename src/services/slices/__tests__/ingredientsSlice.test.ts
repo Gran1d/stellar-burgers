@@ -40,7 +40,7 @@ describe('Редьюсер ingredients', () => {
     expect(result.isLoading).toBe(true);
   });
 
-  test('fulfiled сохранение полученных ингридиентов и завершение загрузки isLoading = false', () => {
+  test('fulfilled сохранение полученных ингредиентов и завершение загрузки isLoading = false', () => {
     const previousState = {
       ...initialState,
       isLoading: true,
@@ -53,7 +53,7 @@ describe('Редьюсер ingredients', () => {
     expect(result.isLoading).toBe(false);
   });
 
-  test('rejected сохранение сообщения об ошибки и завершение загрузки isLoading = false', () => {
+  test('rejected сохранение сообщения об ошибке и завершение загрузки isLoading = false', () => {
     const previousState = {
       ...initialState,
       isLoading: true,
